@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:parttime/screens/profile_screen.dart';
 
 final profileActiveProvider = StateProvider<bool>((ref) => true);
 
@@ -163,8 +164,29 @@ class UserHomeScreen extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _roundedButton("Profile"),
-                      _roundedButton("Settings"),
+                      
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ProfileScreen(),
+                            ),
+                          );
+                        },
+                        child: _roundedButton("Profile"),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ProfileScreen(),
+                            ),
+                          );
+                        },
+                        child: _roundedButton("Settings"),
+                      ),
                     ],
                   ),
                 ],

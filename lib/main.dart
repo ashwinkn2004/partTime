@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:parttime/screens/login_screen.dart';
 import 'package:parttime/screens/user_home_screen.dart';
 
 void main() {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (_, child) {
         return MaterialApp(
-          home: UserHomeScreen(),
+          home: LoginScreen(),
           debugShowCheckedModeBanner: false,
           color: Colors.white,
         );
