@@ -22,6 +22,8 @@ class MyApp extends StatelessWidget {
           home: LoginScreen(),
           debugShowCheckedModeBanner: false,
           color: Colors.white,
+
+          
         );
       },
     );
