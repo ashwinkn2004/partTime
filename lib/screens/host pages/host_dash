@@ -1,0 +1,328 @@
+import 'package:flutter/material.dart';
+
+class HostDashboardPage extends StatefulWidget {
+  const HostDashboardPage({Key? key}) : super(key: key);
+
+  @override
+  State<HostDashboardPage> createState() => _HostDashboardPageState();
+}
+
+class _HostDashboardPageState extends State<HostDashboardPage> {
+  // THEME tuned to your screenshot
+  final Color bg = const Color(0xFFFFFFFF);
+  final Color textPrimary = const Color(0xFF1D1B20);
+  final Color textSecondary = const Color(0xFF8B8B8F);
+  final Color chipBg = const Color(0xFFF0EFEF);
+  final Color darkChipBg = const Color(0xFF1F1F1F);
+  final Color progressTrack = const Color(0xFFE6E6E8);
+
+  // demo event (replace with real data)
+  final DateTime? upcomingEventDate = DateTime.now().add(const Duration(days: 2));
+  final String eventTitle = 'Wedding Reception';
+  final String eventStage = 'Planning';
+  final List<String> stageTrail = const ['Vendors Selected', 'Paid', 'Registered'];
+
+  String _daysUntil(DateTime? date) {
+    try {
+      if (date == null) return 'Date TBD';
+      final now = DateTime.now();
+      final d = DateTime(date.year, date.month, date.day);
+      final n = DateTime(now.year, now.month, now.day);
+      final diff = d.difference(n).inDays;
+      if (diff < 0) return 'in the past';
+      if (diff == 0) return 'today';
+      if (diff == 1) return 'tomorrow';
+      return 'in $diff days';
+    } catch (_) {
+      return 'Date TBD';
+    }
+  }
+
+  double _progressValueFromStage(String stage) {
+    // simple mapping; plug your own logic
+    final order = ['Planning', 'Vendors Selected', 'Paid', 'Registered'];
+    final idx = order.indexOf(stage);
+    if (idx < 0) return 0.2;
+    return (idx + 1) / order.length;
+  }
+
+  void _safeSnack(String msg) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  // tap handlers (hook up navigation later)
+  void _onNewEvent() => _safeSnack('New Event tapped');
+  void _onMyVendors() => _safeSnack('My Vendors tapped');
+  void _onInbox() => _safeSnack('Inbox tapped');
+  void _onCreateEvent() => _safeSnack('Create Event tapped');
+
+  @override
+  Widget build(BuildContext context) {
+    final progressValue = _progressValueFromStage(eventStage).clamp(0.0, 1.0);
+
+    return Scaffold(
+      backgroundColor: bg,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: bg,
+        centerTitle: true,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // small avatar
+            CircleAvatar(
+              radius: 14,
+              backgroundColor: const Color(0xFFF5E9E1),
+              child: Text('👩', style: Theme.of(context).textTheme.bodyMedium),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Hey Olivia 👋',
+              style: TextStyle(
+                color: textPrimary,
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: _BottomNav(currentIndex: 0, textSecondary: textSecondary),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          children: [
+            // Planning + progress
+            Text(
+              eventStage,
+              style: TextStyle(
+                color: textPrimary,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: LinearProgressIndicator(
+                value: progressValue,
+                minHeight: 8,
+                backgroundColor: progressTrack,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black87),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              '${stageTrail.join(' -> ')}',
+              style: TextStyle(color: textSecondary, fontSize: 12, height: 1.2),
+            ),
+            const SizedBox(height: 20),
+
+            // Event summary card
+            _EventSummaryCard(
+              title: 'Upcoming Event Summary',
+              subtitle: eventTitle,
+              timeText: _daysUntil(upcomingEventDate),
+              textPrimary: textPrimary,
+              textSecondary: textSecondary,
+            ),
+            const SizedBox(height: 24),
+
+            // Quick Actions
+            Text(
+              'Quick Actions',
+              style: TextStyle(
+                color: textPrimary,
+                fontWeight: FontWeight.w800,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                _ActionChipFilled(
+                  label: 'New Event',
+                  filled: true,
+                  onTap: _onNewEvent,
+                ),
+                _ActionChipFilled(
+                  label: 'My Vendors',
+                  onTap: _onMyVendors,
+                ),
+                _ActionChipFilled(
+                  label: 'Inbox',
+                  onTap: _onInbox,
+                ),
+                _ActionChipFilled(
+                  label: 'Create event',
+                  onTap: _onCreateEvent,
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EventSummaryCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String timeText;
+  final Color textPrimary;
+  final Color textSecondary;
+
+  const _EventSummaryCard({
+    required this.title,
+    required this.subtitle,
+    required this.timeText,
+    required this.textPrimary,
+    required this.textSecondary,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // image card
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: _SafeImage(
+            // replace with your asset path
+            imageProvider: const AssetImage('assets/images/event_hero.jpg'),
+            height: 160,
+          ),
+        ),
+        const SizedBox(height: 14),
+        Text(
+          title,
+          style: TextStyle(
+            color: textPrimary,
+            fontWeight: FontWeight.w800,
+            fontSize: 18,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          subtitle,
+          style: TextStyle(
+            color: textPrimary.withOpacity(0.85),
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          timeText,
+          style: TextStyle(
+            color: textSecondary,
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ActionChipFilled extends StatelessWidget {
+  final String label;
+  final bool filled;
+  final VoidCallback onTap;
+
+  const _ActionChipFilled({
+    required this.label,
+    required this.onTap,
+    this.filled = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = filled;
+    final bg = isDark ? const Color(0xFF1F1F1F) : const Color(0xFFF0EFEF);
+    final fg = isDark ? Colors.white : const Color(0xFF3A3A3A);
+
+    return Material(
+      color: bg,
+      borderRadius: BorderRadius.circular(22),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(22),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: fg,
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SafeImage extends StatelessWidget {
+  final ImageProvider imageProvider;
+  final double height;
+
+  const _SafeImage({required this.imageProvider, required this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    // add basic error/fallback handling
+    return Image(
+      image: imageProvider,
+      height: height,
+      width: double.infinity,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) {
+        return Container(
+          height: height,
+          color: const Color(0xFFEDEDED),
+          alignment: Alignment.center,
+          child: const Icon(Icons.broken_image_outlined),
+        );
+      },
+    );
+  }
+}
+
+class _BottomNav extends StatelessWidget {
+  final int currentIndex;
+  final Color textSecondary;
+  const _BottomNav({required this.currentIndex, required this.textSecondary});
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      type: BottomNavigationBarType.fixed,
+      selectedItemColor: Colors.black87,
+      unselectedItemColor: textSecondary,
+      showUnselectedLabels: true,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.people_outline), label: 'Requests'),
+        BottomNavigationBarItem(icon: Icon(Icons.add_box_outlined), label: 'New Event'),
+        BottomNavigationBarItem(icon: Icon(Icons.receipt_long_outlined), label: 'Payments'),
+        BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
+      ],
+      onTap: (i) {
+        // Hook navigation here. For now we just give feedback.
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Tapped tab ${i + 1}')),
+        );
+      },
+    );
+  }
+}
