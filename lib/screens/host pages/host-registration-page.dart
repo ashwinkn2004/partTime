@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parttime/screens/host%20pages/host_dash.dart';
 
 class HostRegistrationPage extends StatefulWidget {
   const HostRegistrationPage({Key? key}) : super(key: key);
@@ -54,20 +55,21 @@ class _HostRegistrationPageState extends State<HostRegistrationPage> {
   }
 
   void _register() async {
-    if (!_aadharVerified) {
-      _showSnack('Please verify Aadhar first');
-      return;
-    }
+    // if (!_aadharVerified) {
+    //   _showSnack('Please verify Aadhar first');
+    //   return;
+    // }
 
-    if (!_formKey.currentState!.validate()) return;
+    // if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isRegistering = true);
+    // setState(() => _isRegistering = true);
 
-    await Future.delayed(const Duration(seconds: 2)); // simulate API
+    // await Future.delayed(const Duration(seconds: 2)); // simulate API
 
-    setState(() => _isRegistering = false);
+    // setState(() => _isRegistering = false);
 
-    _showSnack('Registration successful 🎉');
+    // _showSnack('Registration successful 🎉');
+    Navigator.push(context, MaterialPageRoute(builder: (context) => HostDashboardPage()));
   }
 
   void _showSnack(String msg) {

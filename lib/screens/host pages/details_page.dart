@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:parttime/screens/host%20pages/payment_page_1.dart';
+import 'package:parttime/screens/host%20pages/payment_page_2.dart';
 
 class PostJobRequestPage extends StatefulWidget {
   const PostJobRequestPage({Key? key}) : super(key: key);
@@ -156,22 +158,29 @@ class _PostJobRequestPageState extends State<PostJobRequestPage> {
       a.year == b.year && a.month == b.month && a.day == b.day;
 
   void _submit() {
-    final fieldErrors = _crossValidate();
-    final ok = _formKey.currentState?.validate() ?? false;
-    if (ok && fieldErrors == null) {
-      FocusScope.of(context).unfocus();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Form looks good. Proceeding...')),
-      );
-      // TODO: call your API or navigate to payment
-    } else {
-      // show first cross-field error if any
-      if (fieldErrors != null) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(fieldErrors)));
-      }
-    }
+    // final fieldErrors = _crossValidate();
+    // final ok = _formKey.currentState?.validate() ?? false;
+    // if (ok && fieldErrors == null) {
+    //   FocusScope.of(context).unfocus();
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Form looks good. Proceeding...')),
+    //   );
+    //   // TODO: call your API or navigate to payment
+    // } else {
+    //   // show first cross-field error if any
+    //   if (fieldErrors != null) {
+    //     ScaffoldMessenger.of(
+    //       context,
+    //     ).showSnackBar(SnackBar(content: Text(fieldErrors)));
+    //   }
+    // }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AdvancePaymentPage()
+      ),
+    );
   }
 
   @override

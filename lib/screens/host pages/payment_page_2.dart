@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parttime/screens/host%20pages/payment_reciept.dart';
 
 class PaymentSuccessPage extends StatelessWidget {
   final String eventTitle;
@@ -9,7 +10,7 @@ class PaymentSuccessPage extends StatelessWidget {
     Key? key,
     required this.eventTitle,
     required this.eventDate,
-    required this.eventImage,
+    required this.eventImage, required String eventName,
   }) : super(key: key);
 
   @override
@@ -110,19 +111,38 @@ class PaymentSuccessPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.grey.shade300),
                 ),
-                child: Row(
-                  children: const [
-                    Icon(Icons.receipt_long, color: Colors.black54),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        "View Receipt",
-                        style: TextStyle(fontSize: 15),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PaymentReceiptPage(
+                          eventTitle: eventTitle,
+                          eventDate: eventDate,
+                          hostName: "Host Name", // Replace with actual host name variable if available
+                          paymentMethod: "Credit Card", // Replace with actual payment method variable if available
+                          recipient: "Recipient Name", // Replace with actual recipient variable if available
+                          transactionId: "TXN123456", // Replace with actual transaction ID variable if available
+                          amountPaid: 100.0, // Replace with actual amount paid variable if available
+                          amountRemaining: 0.0, // Replace with actual amount remaining variable if available
+                        ),
                       ),
-                    ),
-                    Icon(Icons.arrow_forward_ios,
-                        size: 16, color: Colors.black54),
-                  ],
+                    );
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.receipt_long, color: Colors.black54),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          "View Receipt",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      Icon(Icons.arrow_forward_ios,
+                          size: 16, color: Colors.black54),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parttime/screens/host%20pages/details_page.dart';
 
 class HostDashboardPage extends StatefulWidget {
   const HostDashboardPage({Key? key}) : super(key: key);
@@ -52,7 +53,7 @@ class _HostDashboardPageState extends State<HostDashboardPage> {
   }
 
   // tap handlers (hook up navigation later)
-  void _onNewEvent() => _safeSnack('New Event tapped');
+  void _onNewEvent() => Navigator.push(context, MaterialPageRoute(builder: (context) => const PostJobRequestPage()));
   void _onMyVendors() => _safeSnack('My Vendors tapped');
   void _onInbox() => _safeSnack('Inbox tapped');
   void _onCreateEvent() => _safeSnack('Create Event tapped');

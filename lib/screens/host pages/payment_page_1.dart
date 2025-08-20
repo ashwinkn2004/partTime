@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parttime/screens/host%20pages/payment_page_2.dart';
 
 class AdvancePaymentPage extends StatefulWidget {
   const AdvancePaymentPage({Key? key}) : super(key: key);
@@ -12,9 +13,25 @@ class _AdvancePaymentPageState extends State<AdvancePaymentPage> {
   final TextEditingController promoCodeController = TextEditingController();
   bool isPaying = false;
 
+  // Define the startDate variable with a sample date
+  final DateTime startDate = DateTime(2024, 7, 15);
+
   final Color sectionTitleColor = Colors.black;
   final Color lightTextColor = Colors.grey.shade600;
   final Color buttonColor = const Color(0xFFE8C28E);
+
+  String _fmtDate(DateTime date) {
+    // Format as 'July 15, 2024'
+    return "${_monthName(date.month)} ${date.day}, ${date.year}";
+  }
+
+  String _monthName(int month) {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return months[month - 1];
+  }
 
   @override
   void dispose() {
@@ -28,16 +45,26 @@ class _AdvancePaymentPageState extends State<AdvancePaymentPage> {
   }
 
   void _payAndRegister() async {
-    if (selectedPaymentMethod == null) {
-      _showSnack('Please select a payment method');
-      return;
-    }
+    // if (selectedPaymentMethod == null) {
+    //   _showSnack('Please select a payment method');
+    //   return;
+    // }
 
-    setState(() => isPaying = true);
-    await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-    setState(() => isPaying = false);
+    // setState(() => isPaying = true);
+    // await Future.delayed(const Duration(seconds: 2)); // Simulate API call
+    // setState(() => isPaying = false);
 
-    _showSnack('Payment Successful & Event Registered 🎉');
+    // _showSnack('Payment Successful & Event Registered 🎉');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentSuccessPage(
+          eventTitle: 'Sample Event',
+          eventDate: _fmtDate(startDate),
+          eventImage: 'assets/sample_event_image.png', eventName: '', // replace with actual image
+        ),
+      ),
+    );
   }
 
   Widget _paymentOption(String method, IconData icon) {

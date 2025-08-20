@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:parttime/controller/auth_controller.dart';
-import 'package:parttime/screens/user_home_screen.dart';
+import 'package:parttime/screens/host pages/host_dash.dart';
+import 'package:parttime/screens/host%20pages/host-registration-page.dart';
 
 import '../providers/auth_provider.dart';
 
@@ -157,7 +158,7 @@ class LoginScreen extends ConsumerWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => UserHomeScreen()),
+                      MaterialPageRoute(builder: (context) => HostDashboardPage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -182,6 +183,10 @@ class LoginScreen extends ConsumerWidget {
                 child: TextButton(
                   onPressed: () {
                     // Navigate to registration screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HostRegistrationPage()),
+                    );
                   },
                   child: Text(
                     "New user ? Register",
